@@ -15,13 +15,13 @@ _global_script_class_icons={
 
 [application]
 
-config/name="Server"
-run/main_scene="res://level.tscn"
+config/name="vrkspace-server"
+run/main_scene="res://scenes/level.tscn"
 config/icon="res://icon.png"
 
 [autoload]
 
-gamestate="*res://gamestate.gd"
+gamestate="*res://scripts/gamestate.gd"
 
 [rendering]
 

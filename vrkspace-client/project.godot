@@ -16,12 +16,12 @@ _global_script_class_icons={
 [application]
 
 config/name="vrkspace-client"
-run/main_scene="res://Main.tscn"
+run/main_scene="res://scenes/menu.tscn"
 config/icon="res://icon.png"
 
 [autoload]
 
-gamestate="*res://gamestate.gd"
+gamestate="*res://script/gamestate.gd"
 
 [input]
 
