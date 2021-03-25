@@ -3,7 +3,7 @@ extends KinematicBody
 const gravity = Vector3.DOWN * 10
 const speed = 4
 const rot_speed = 0.85
-var velocity = Vector3()
+var velocity = Vector3.ZERO
 
 puppet var puppet_pos
 puppet var puppet_vel = Vector3()
@@ -11,6 +11,7 @@ puppet var puppet_vel = Vector3()
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	if is_network_master():
+		$Camera.make_current()
 		#$NameLabel.text = "You"
 		pass
 	else:
@@ -23,18 +24,7 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta):
 	if is_network_master():
-		var move_dir = Vector3.ZERO
-		
-		if Input.is_action_pressed("up"):
-			move_dir.y -= 1
-		if Input.is_action_pressed("down"):
-			move_dir.y += 1
-		if Input.is_action_pressed("left"):
-			move_dir.x -= 1
-		if Input.is_action_pressed("right"):
-			move_dir.x += 1
-		
-		velocity = move_dir.normalized() * speed
+		get_input(delta)
 		
 		rset_unreliable("puppet_pos", transform)
 		rset_unreliable("puppet_vel", velocity)
@@ -44,7 +34,7 @@ func _physics_process(delta):
 		transform = puppet_pos
 		velocity = puppet_vel
 	
-	move_and_slide(velocity * delta, Vector3.UP)
+	velocity = move_and_slide(velocity, Vector3.UP)
 	
 	if not is_network_master():
 		# It may happen that many frames pass before the controlling player sends
@@ -52,3 +42,16 @@ func _physics_process(delta):
 		# we will keep jumping back until controlling player sends next position update.
 		# Therefore, we update puppet_pos to minimize jitter problems
 		puppet_pos = transform
+
+func get_input(delta):
+	var vy = velocity.y
+	velocity = Vector3.ZERO
+	if Input.is_action_pressed("forward"):
+		velocity += -transform.basis.z * speed
+	if Input.is_action_pressed("back"):
+		velocity += transform.basis.z * speed
+	if Input.is_action_pressed("right"):
+		rotate_y(-rot_speed * delta)
+	if Input.is_action_pressed("left"):
+		rotate_y(rot_speed * delta)
+	velocity.y = vy
