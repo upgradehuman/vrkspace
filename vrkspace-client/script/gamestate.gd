@@ -1,7 +1,6 @@
 extends Node
 
 # Game port and ip
-const ip = "127.0.0.1"
 const DEFAULT_PORT = 44444
 
 # Signal to let GUI know whats up
@@ -9,6 +8,7 @@ signal connection_failed()
 signal connection_succeeded()
 signal server_disconnected()
 
+var ip = "127.0.0.1"
 var my_name = "Client"
 
 # Players dict stored as id:name
@@ -19,10 +19,6 @@ func _ready():
 	get_tree().connect("connected_to_server", self, "_connected_ok")
 	get_tree().connect("connection_failed", self, "_connected_fail")
 	get_tree().connect("server_disconnected", self, "_server_disconnected")
-	
-	# Try to connect right away
-	connect_to_server()
-
 
 
 func connect_to_server():
