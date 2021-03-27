@@ -11,7 +11,7 @@ puppet var puppet_vel = Vector3()
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	if is_network_master():
-		$Camera.make_current()
+		#$Camera.make_current()
 		#$NameLabel.text = "You"
 		pass
 	else:
@@ -24,17 +24,15 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta):
 	if is_network_master():
-		get_input(delta)
-		
+		transform = get_tree().get_owner().get_node("UserController").transform
 		rset_unreliable("puppet_pos", transform)
-		rset_unreliable("puppet_vel", velocity)
 	else:
 		# If we are not the ones controlling this player, 
 		# sync to last known position and velocity
 		transform = puppet_pos
-		velocity = puppet_vel
+		#velocity = puppet_vel
 	
-	velocity = move_and_slide(velocity, Vector3.UP)
+	#velocity = move_and_slide(velocity, Vector3.UP)
 	
 	if not is_network_master():
 		# It may happen that many frames pass before the controlling player sends
@@ -43,15 +41,4 @@ func _physics_process(delta):
 		# Therefore, we update puppet_pos to minimize jitter problems
 		puppet_pos = transform
 
-func get_input(delta):
-	var vy = velocity.y
-	velocity = Vector3.ZERO
-	if Input.is_action_pressed("forward"):
-		velocity += -transform.basis.z * speed
-	if Input.is_action_pressed("back"):
-		velocity += transform.basis.z * speed
-	if Input.is_action_pressed("right"):
-		rotate_y(-rot_speed * delta)
-	if Input.is_action_pressed("left"):
-		rotate_y(rot_speed * delta)
-	velocity.y = vy
+

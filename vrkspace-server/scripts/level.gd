@@ -1,6 +1,6 @@
 extends Spatial
 
-onready var Player = load("res://scenes/avatar.tscn")
+onready var Player = load("res://scenes/user.tscn")
 
 
 puppetsync func spawn_player(spawn_pos, id):

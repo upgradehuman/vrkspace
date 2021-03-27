@@ -23,6 +23,10 @@ config/icon="res://icon.png"
 
 gamestate="*res://script/gamestate.gd"
 
+[gdnative]
+
+singletons=[ "res://addons/godot-openvr/godot_openvr.gdnlib" ]
+
 [input]
 
 forward={
